@@ -7,7 +7,7 @@ data = {}
 temp_r = {}
 
 local db = ADO_Open(db_string)
-db:exec("select * from ReceivedData")
+db:exec("select * from [ReceivedData]")
 t = db:row()
 
 if t then
