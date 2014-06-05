@@ -1,0 +1,32 @@
+通讯双人赛
+
+1. lua txs.lua desks  --->round_datas.lua
+2. lua init.lua
+3. 然后每轮移位，执行 lua round.lua
+4. 比赛结束后，执行 lua get_data.lua
+5. lua result.lua  结果存储在 result.txt中
+
+瑞士移位队式赛
+
+1. lua swiss_team.lua teams rounds  boards   ---->round_datas.lua result.dat
+2. lua init.lua
+3. 每轮结束，执行 lua get_data.lua
+4. lua result.lua round 计算某轮次结果  rn.txt   -->result.dat
+5. lua result.lua round desk 计算某轮次，某台结果，开闭室计算  rn-tablen.txt    --->result.dat
+6. 下一轮次开始前，lua swiss_next.lua 计算出下一轮对阵  -->round_datas.lua result.dat
+7. lua round.lua 进入下一轮
+8. 比赛结束，运行 lua swiss_next.lua 得到最终排名
+
+
+瑞士移位双人赛，允许重复对垒，第一轮抽签决定1-2 3-4 ......
+
+1.lua swiss_pair.lua desks rounds boards
+2.lua init.lua
+
+ 3.lua round.lua
+ 4.lua get_data.lua
+ 5.lua result.lua round -->result.dat
+ 6.lua sp_next.lua [w]
+ 
+code 749 769
+TD_CODE 0000
