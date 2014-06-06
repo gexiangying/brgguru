@@ -21,8 +21,8 @@ menu_session = iup.menu{item_session_set,item_session_upset,item_session_open,it
 submenu_session = iup.submenu{menu_session,title="比赛"}
 
 item_result_get = iup.item{title="下载记录"}
-item_result_show_data = iup.item{title="显示记录"}
-item_result_cal = iup.item{title="计算"}
+--item_result_show_data = iup.item{title="显示记录"}
+--item_result_cal = iup.item{title="计算"}
 item_result_sum = iup.item{title="累计结果"}
 item_result_create = iup.item{title="生成测试数据"}
 

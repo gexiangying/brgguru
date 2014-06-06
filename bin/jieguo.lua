@@ -52,6 +52,7 @@ end
 db:close()
 
 project.data = data
+cal()
 end
 
 function show_data()
@@ -74,11 +75,11 @@ local function mk_index(sets)
 end
 
 function cal()
- local cur = project.cur_round or 0
- local status
- status,cur = iup.GetParam("计算",nil,"轮次 %i\n",cur)
- if not status or cur < 1  then return end
- 
+ local cur_round = project.cur_round or 0
+-- local status
+-- status,cur = iup.GetParam("计算",nil,"轮次 %i\n",cur)
+-- if not status or cur < 1  then return end
+ for cur=1,cur_round do
  local sets = brg.mk_sets(project.data,cur)  -- {[6]={set,set,set},[7]={record,record}}
  local index = mk_index(sets)    --{6,7,8....}
  for i,v in ipairs(index) do
@@ -87,6 +88,7 @@ function cal()
    brg.mp(rs)
    brg.ximp(rs)
    end
+ end
  end
 end
 
@@ -115,12 +117,12 @@ local function sum_im(v,cur)
   local p_ns_cur = project.players[NS][cur]
   local p_ew_cur = project.players[EW][cur]
   
-  p_ns_cur.mp = p_ns_cur.mp + v.NS_mp or 0.0
-  p_ns_cur.ximp = p_ns_cur.ximp + v.NS_ximp or 0.0
+  p_ns_cur.mp = p_ns_cur.mp + (v.NS_mp or 0.0)
+  p_ns_cur.ximp = p_ns_cur.ximp + (v.NS_ximp or 0.0)
   p_ns_cur.boards = p_ns_cur.boards + 1
   
-  p_ew_cur.mp = p_ew_cur.mp + v.EW_mp or 0.0
-  p_ew_cur.ximp = p_ew_cur.ximp + v.EW_ximp or 0.0
+  p_ew_cur.mp = p_ew_cur.mp + (v.EW_mp or 0.0)
+  p_ew_cur.ximp = p_ew_cur.ximp + (v.EW_ximp or 0.0)
   p_ew_cur.boards = p_ew_cur.boards + 1
   
 end
@@ -151,9 +153,7 @@ end
 function sum()
   
   local cur = project.cur_round or 0
-  local status
-  status,cur = iup.GetParam("统计",nil,"轮次 %i\n",cur)
-  if not status or cur < 1  then return end
+  if cur < 1 then return end
  
   if not init_players(cur) then return end
   
@@ -211,8 +211,8 @@ end
 
 function link_menu(menu)
  menu.item_result_get.action = download
- menu.item_result_show_data.action = show_data
- menu.item_result_cal.action = cal
+ --menu.item_result_show_data.action = show_data
+ --menu.item_result_cal.action = cal
  menu.item_result_sum.action = sum
  menu.item_result_create.action = test
 end
