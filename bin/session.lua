@@ -79,6 +79,13 @@ function show()
  matrix.reset()
 end
 
+function open()
+  local database_name = project.database_name
+  if database_name then
+  os.execute([["C:\\Program Files (x86)\\Bridgemate Pro\\BMPro.exe"]] .. " /f:\[" .. database_name .. "]  /s /r")
+  end
+end
+
 function upload()
  if project.cur_round > 0 then
    local db = ADO_Open(project.db_string)
@@ -104,6 +111,7 @@ end
 function link_menu(menu)
  menu.item_session_set.action = set
  menu.item_session_upset.action = upset
+ menu.item_session_open.action = open
  menu.item_session_add.action = add
  menu.item_session_save.action = save
  menu.item_session_show.action = show

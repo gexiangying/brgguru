@@ -5,6 +5,7 @@ function new()
  local s
  s,project.name = iup.GetParam("ÐÂ½¨",nil,"Ãû×Ö %s\n","")
  if s then 
+  project = {}
   project.file_name = project.name .. ".apc"
   project.database_name = project.name .. ".bws"
   project.db_string = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" .. project.database_name
