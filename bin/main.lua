@@ -1,4 +1,6 @@
 package.cpath = "./?51.dll;./?.dll"
+
+
 require('iuplua')
 require( "iupluacontrols" )
 require("menu")
@@ -10,13 +12,14 @@ require("session")
 require("jieguo")
 require "ado"
 
+
 project = {}
-project.name = ""
 project.cur_round = 0
-project.rounds = 0
-project.round = {}
-project.sections = 0
-project.desks = 0
+
+function init_prj()
+ project = {}
+ project.cur_round = 0
+end
 
 file.link_menu(menu)
 session.link_menu(menu)

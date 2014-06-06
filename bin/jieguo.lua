@@ -1,6 +1,6 @@
 module(...,package.seeall)
 require "luabridge"
-
+require "brg"
 
 function download()
 local data = {}
@@ -57,16 +57,113 @@ end
 function show_data()
  local cur = project.cur_round or 0
  local desk = 1
+ local status
  status,cur,desk = iup.GetParam("显示",nil,"轮次 %i\n桌号 %i\n",cur,desk)
  if not status then return end
  --assert(nil,cur .. desk)
  matrix.reset("data",cur,desk)
 end
 
+local function mk_index(sets)
+  local index = {}
+  for k,v in pairs(sets) do
+    table.insert(index,k)
+  end
+  table.sort(index)
+  return index
+end
+
 function cal()
+ local cur = project.cur_round or 0
+ local status
+ status,cur = iup.GetParam("计算",nil,"轮次 %i\n",cur)
+ if not status or cur < 1  then return end
+ 
+ local sets = brg.mk_sets(project.data,cur)  -- {[6]={set,set,set},[7]={record,record}}
+ local index = mk_index(sets)    --{6,7,8....}
+ for i,v in ipairs(index) do
+   local rs = sets[v]   --rs = {set,set,set}
+   if rs and #rs > 1 then
+   brg.mp(rs)
+   brg.ximp(rs)
+   end
+ end
+end
+
+local function init_players(cur)
+  
+  if not project.players_num then return false end
+  local players = project.players or {}
+
+  for i=1,project.players_num do
+    players[i] = players[i] or {}
+    players[i][cur] = players[i][cur] or {}
+    players[i][cur].mp =  0.0
+    players[i][cur].ximp =  0.0
+    players[i][cur].vp =  0.0
+    players[i][cur].boards = 0
+    players[i].no = i
+  end
+  
+  project.players = players
+  return true
+end
+
+local function sum_im(v,cur)
+  local NS = v.NS
+  local EW = v.EW
+  local p_ns_cur = project.players[NS][cur]
+  local p_ew_cur = project.players[EW][cur]
+  
+  p_ns_cur.mp = p_ns_cur.mp + v.NS_mp or 0.0
+  p_ns_cur.ximp = p_ns_cur.ximp + v.NS_ximp or 0.0
+  p_ns_cur.boards = p_ns_cur.boards + 1
+  
+  p_ew_cur.mp = p_ew_cur.mp + v.EW_mp or 0.0
+  p_ew_cur.ximp = p_ew_cur.ximp + v.EW_ximp or 0.0
+  p_ew_cur.boards = p_ew_cur.boards + 1
+  
+end
+
+local function ave_result()
+  local players = project.players
+  for i=1,project.players_num do
+     local total_mp = 0.0
+     local total_ximp = 0.0
+     local total_boards = 0
+     for j,v in ipairs(players[i]) do 
+        total_mp = total_mp + v.mp
+	total_ximp = total_ximp + v.ximp
+	total_boards = total_boards + v.boards
+     end
+    if total_boards >0 then 
+       players[i].ave_mp = brg.floor_num(total_mp / total_boards)
+       players[i].ave_ximp = brg.floor_num(total_ximp / total_boards)
+       players[i].boards = total_boards
+    else
+       players[i].ave_mp = players[i].ave_mp or 0.0
+       players[i].ave_ximp = players[i].ave_ximp or 0.0
+       players[i].boards = 0
+    end
+  end
 end
 
 function sum()
+  
+  local cur = project.cur_round or 0
+  local status
+  status,cur = iup.GetParam("统计",nil,"轮次 %i\n",cur)
+  if not status or cur < 1  then return end
+ 
+  if not init_players(cur) then return end
+  
+  for i,v in ipairs(project.data) do
+    if v.round == cur then  
+      sum_im(v,cur)
+    end
+  end
+  ave_result()
+  matrix.reset_sum()
 end
 
 

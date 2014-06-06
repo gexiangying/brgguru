@@ -35,6 +35,7 @@ function upset()
 end
 
 function add()
+ if project.cur_round == project.rounds then return end
  local status
  local l = project.cur_l or 1
  local h = project.cur_h or 16
@@ -43,29 +44,35 @@ function add()
  
  local cur_round = project.cur_round or 0
  cur_round = cur_round + 1
- project.cur_round = cur_round
+ 
  local desks = project.desks or 0
  
- if cur_round < project.rounds then
+ if cur_round < project.rounds + 1 then
+   --project.cur_round = cur_round
    project.round = project.round or {}
    local round = project.round
    round[cur_round] = round[cur_round] or {}
    local temp = round[cur_round]
    for i = 1,desks do
      temp[i] = temp[i] or {}
-     temp[i].NS = i * 2 -1
-     temp[i].EW = i * 2
-     temp[i].section = 1
+     if cur_round == 1 then
+	temp[i].NS = i * 2 -1
+	temp[i].EW = i * 2
+	temp[i].section = 1
+     end
      temp[i].l = l
      temp[i].h = h
    end
-   matrix.reset()
+   matrix.reset("round",cur_round)
  end
 end
 
 function save()
- local cur_round = project.cur_round or 0
+ if matrix.mode_flag ~= "round" then return end
+ local cur_round = project.cur_round or 0 
+ cur_round = cur_round + 1
  if cur_round > 0 then
+   project.cur_round = cur_round
    project.round = project.round or {}
    local round = matrix.get_value()
    if round then
@@ -76,7 +83,7 @@ function save()
 end
 
 function show()
- matrix.reset()
+ matrix.reset("round",project.cur_round)
 end
 
 function open()

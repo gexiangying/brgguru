@@ -2,10 +2,10 @@ require "comma"
 module(...,package.seeall)
 
 function new()
- local s
- s,project.name = iup.GetParam("新建",nil,"名字 %s\n","")
+ local s,name = iup.GetParam("新建",nil,"名字 %s\n","")
  if s then 
-  project = {}
+  init_prj()
+  project.name = name
   project.file_name = project.name .. ".apc"
   project.database_name = project.name .. ".bws"
   project.db_string = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" .. project.database_name

@@ -148,6 +148,7 @@ function ximp_im(t,sets)
     num = num + luabridge.imp(score)
   end
   t.NS_ximp = num /(#sets -1) 	
+  t.NS_ximp = floor_num(t.NS_ximp)
   t.EW_ximp = -t.NS_ximp
 end
 function ximp(sets)
@@ -165,7 +166,8 @@ function mp_im(t,sets)
    end
   end
   num = num - 0.5;
-  t.NS_mp = num * 100 /(#sets -1) 	
+  t.NS_mp = num * 100 /(#sets -1) 
+  t.NS_mp = floor_num(t.NS_mp)  
   t.EW_mp = 100 - t.NS_mp
 end
 
