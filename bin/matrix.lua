@@ -84,6 +84,7 @@ end
 end
 
 local function reset_data(cur,desk)
+if not project.data then return end
 mat.numcol = 10
 mat.numcol_visible = 10
 local num =0
