@@ -1,13 +1,13 @@
 module(...,package.seeall)
 
-mode_flag = "round"
-function get_matrix()
 local mat = iup.matrix{widthdef=50,SCROLLBAR="YES"}
 mat.resizematrix = "YES"
-return mat
+mode_flag = "round"
+function get_matrix()
+  return mat
 end
 
-local function reset_round(mat)
+local function reset_round()
 mat.numcol = 5
 mat.numcol_visible = 5
 mat.numlin=project.desks or 0
@@ -30,7 +30,7 @@ mat:setcell(i,5,round.h)
 end
 end
 
-local function reset_data(mat,cur,desk)
+local function reset_data(cur,desk)
 mat.numcol = 8
 mat.numcol_visible = 8
 local num =0
@@ -69,17 +69,17 @@ end
 
 end
 
-function reset(mat,flag,cur,desk)
+function reset(flag,cur,desk)
 mode_flag = flag or "round"
 if mode_flag == "round" then
-reset_round(mat)
+reset_round()
 elseif mode_flag == "data" then
-reset_data(mat,cur,desk)
+reset_data(cur,desk)
 end
 iup.UpdateChildren(MDI1Form)
 end
 
-function get_value(mat)
+function get_value()
 if mode_flag ~= "round" then return nil end
 local dat = {}
 for i = 1,mat.numlin do

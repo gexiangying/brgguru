@@ -59,7 +59,7 @@ function add()
      temp[i].l = l
      temp[i].h = h
    end
-   matrix.reset(mat)
+   matrix.reset()
  end
 end
 
@@ -67,16 +67,16 @@ function save()
  local cur_round = project.cur_round or 0
  if cur_round > 0 then
    project.round = project.round or {}
-   local round = matrix.get_value(mat)
+   local round = matrix.get_value()
    if round then
    project.round[cur_round] = round
    end
-   tree.reset(t)
+   tree.reset()
  end
 end
 
 function show()
- matrix.reset(mat)
+ matrix.reset()
 end
 
 function upload()

@@ -59,7 +59,8 @@ function show_data()
  local desk = 1
  status,cur,desk = iup.GetParam("ÏÔÊ¾",nil,"ÂÖ´Î %i\n×ÀºÅ %i\n",cur,desk)
  if not status then return end
- matrix.reset(mat,"data",cur,desk)
+ --assert(nil,cur .. desk)
+ matrix.reset("data",cur,desk)
 end
 
 function cal()

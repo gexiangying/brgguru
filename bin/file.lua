@@ -9,7 +9,7 @@ function new()
   project.database_name = project.name .. ".bws"
   project.db_string = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" .. project.database_name
   os.execute("copy Default.bws " .. project.database_name)
-  tree.reset(t)
+  tree.reset()
  end
 end
 
@@ -17,7 +17,7 @@ function open()
   local str,status = iup.GetFile("./*.apc")
   if status == 0 then
     dofile(str)
-    tree.reset(t)
+    tree.reset()
   end
 end
 

@@ -18,15 +18,12 @@ project.round = {}
 project.sections = 0
 project.desks = 0
 
-MDIMenu = menu.mainmenu
-t = tree.get_tree()
-mat = matrix.get_matrix()
 file.link_menu(menu)
 session.link_menu(menu)
 jieguo.link_menu(menu)
 
-MainForm = frm.get_main(MDIMenu,t)
-MDI1Form = frm.get_child(mat)
+MainForm = frm.get_main(menu.mainmenu,tree.get_tree())
+MDI1Form = frm.get_child(matrix.get_matrix())
 MainForm:show()
 MDI1Form:show()
 iup.Refresh(MainForm)
