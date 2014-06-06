@@ -214,6 +214,6 @@ function link_menu(menu)
  --menu.item_result_show_data.action = show_data
  --menu.item_result_cal.action = cal
  menu.item_result_sum.action = sum
- menu.item_result_create.action = test
+-- menu.item_result_create.action = test
 end
 
