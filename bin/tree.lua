@@ -20,9 +20,9 @@ function reset()
   t.addbranch = project.name
   for i=project.cur_round,1,-1 do
     local round = project.round[i]
-    t.addbranch = "round " .. i
+    t.addbranch = "µÚ" .. i .. "ÂÖ"
     for k=#round,1,-1  do
-      t.addleaf1 = k .. "-" .. round[k].NS .. "-" .. round[k].EW
+      t.addleaf1 = k .. "×À-(NS-" .. round[k].NS .. ")+(EW-" .. round[k].EW .. ")"
       local temp = {round=i,desk = k}
       iup.TreeSetUserId(t,2,temp)
     end

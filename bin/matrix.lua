@@ -11,12 +11,16 @@ local function cmp_ave_ximp(a,b)
    return a.ave_ximp > b.ave_ximp
 end
 
+local function cmp_vp(a,b)
+   return a.vp > b.vp
+end
+
 local function get_sort_players()
   local players = {}
   for i,v in ipairs(project.players) do
      players[i] = v
   end
-  table.sort(players,cmp_ave_ximp)
+  table.sort(players,cmp_vp)
   
   local cur = project.cur_round + 1
   local desks = project.desks 
@@ -44,18 +48,18 @@ function reset_sum()
  for i=1,cur do
  mat:setcell(0,i,"第" .. i .. "轮")
  end
- mat:setcell(0,cur+1,"平均ximp")
+ mat:setcell(0,cur+1,"vp")
  mat:setcell(0,cur+2,"总副数")
- mat:setcell(0,cur+3,"平均mp")
+ mat:setcell(0,cur+3,"ximp")
  local players = get_sort_players()
  for i,v in ipairs(players) do
    mat:setcell(i,0,v.no)
    for j=1,cur do
-     mat:setcell(i,j,v[j].ximp) 
+     mat:setcell(i,j,v[j].vp) 
    end
-   mat:setcell(i,cur+1,v.ave_ximp)
+   mat:setcell(i,cur+1,v.vp)
    mat:setcell(i,cur+2,v.boards)
-   mat:setcell(i,cur+3,v.ave_mp)
+   mat:setcell(i,cur+3,v.ximp)
  end
  iup.UpdateChildren(MDI1Form)
 end

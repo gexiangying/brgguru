@@ -133,18 +133,22 @@ local function ave_result()
      local total_mp = 0.0
      local total_ximp = 0.0
      local total_boards = 0
+     local total_vp = 0.0
      for j,v in ipairs(players[i]) do 
         total_mp = total_mp + v.mp
 	total_ximp = total_ximp + v.ximp
 	total_boards = total_boards + v.boards
+	v.vp = brg.vp(v.boards,v.ximp)
+	total_vp = total_vp + v.vp
      end
     if total_boards >0 then 
-       players[i].ave_mp = brg.floor_num(total_mp / total_boards)
-       players[i].ave_ximp = brg.floor_num(total_ximp / total_boards)
+       players[i].ave_mp = brg.floor_num(total_mp/total_boards)
+       players[i].ximp = brg.floor_num(total_ximp)
        players[i].boards = total_boards
+       players[i].vp = brg.floor_num(total_vp)
     else
        players[i].ave_mp = players[i].ave_mp or 0.0
-       players[i].ave_ximp = players[i].ave_ximp or 0.0
+       players[i].ximp = players[i].ximp or 0.0
        players[i].boards = 0
     end
   end
@@ -152,15 +156,16 @@ end
 
 function sum()
   
-  local cur = project.cur_round or 0
-  if cur < 1 then return end
+  local cur_round = project.cur_round or 0
+  if cur_round < 1 then return end
  
-  if not init_players(cur) then return end
-  
+  for cur=1,cur_round do 
+  init_players(cur)
   for i,v in ipairs(project.data) do
     if v.round == cur then  
       sum_im(v,cur)
     end
+  end
   end
   ave_result()
   matrix.reset_sum()
