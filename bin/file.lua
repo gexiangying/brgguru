@@ -19,6 +19,7 @@ function open()
   if status == 0 then
     dofile(str)
     tree.reset()
+    tree.reset_t1()
   end
 end
 

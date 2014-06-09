@@ -87,6 +87,51 @@ mat:setcell(i,5,round.h)
 end
 end
 
+function reset_board(cur,board)
+mode_flag = "board"
+mat.numcol = 10
+mat.numcol_visible = 10
+local num =0
+for i,v in ipairs(project.data) do
+if v.round == cur and v["board"] == board then
+num = num + 1
+end
+end
+
+mat.numlin= num
+mat.numlin_visible= num
+
+mat:setcell(0,0,"记录")
+mat:setcell(0,1,"桌号")
+mat:setcell(0,2,"南北")
+mat:setcell(0,3,"东西")
+mat:setcell(0,4,"分区")
+mat:setcell(0,5,"轮次")
+mat:setcell(0,6,"牌号")
+mat:setcell(0,7,"定约")
+mat:setcell(0,8,"得分")
+mat:setcell(0,9,"mp")
+mat:setcell(0,10,"ximp")
+num=0
+for i,v in ipairs(project.data) do
+if v.round == cur and v["board"] == board then
+num = num + 1
+mat:setcell(num,0,i)
+mat:setcell(num,1,v["table"])
+mat:setcell(num,2,v["NS"])
+mat:setcell(num,3,v["EW"])
+mat:setcell(num,4,v["section"])
+mat:setcell(num,5,v["round"])
+mat:setcell(num,6,v["board"])
+mat:setcell(num,7,v["constr"])
+mat:setcell(num,8,v["score"])
+mat:setcell(num,9,v.NS_mp or "")
+mat:setcell(num,10,v.NS_ximp or "")
+end
+end
+iup.UpdateChildren(MDI1Form)
+end
+
 local function reset_data(cur,desk)
 if not project.data then return end
 mat.numcol = 10

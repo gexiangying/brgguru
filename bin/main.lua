@@ -1,6 +1,5 @@
 package.cpath = "./?51.dll;./?.dll"
 
-
 require('iuplua')
 require( "iupluacontrols" )
 require("menu")
@@ -9,7 +8,8 @@ require("matrix")
 require("frm")
 require("file")
 require("session")
-require("jieguo")
+require("result")
+require ("mgr")
 require "ado"
 
 
@@ -23,7 +23,7 @@ end
 
 file.link_menu(menu)
 session.link_menu(menu)
-jieguo.link_menu(menu)
+result.link_menu(menu)
 
 MainForm = frm.get_main(menu.mainmenu,tree.get_tree())
 MDI1Form = frm.get_child(matrix.get_matrix())
