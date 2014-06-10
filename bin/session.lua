@@ -19,15 +19,18 @@ function upset()
   local db_string = project.db_string
   if db_string then 
   local db = ADO_Open(db_string)
+  local computer_name = get_computer_name()
+ -- assert(nil,computer_name)
+  db:exec("UPDATE [Clients] SET Computer = '" .. computer_name .. "' WHERE Computer <> '" .. computer_name .. "'")
   db:exec("DELETE * FROM [Section]")
   db:exec("DELETE * FROM [Tables]")
   for i =1,sections do
-    db:exec("INSERT INTO [Section] VALUES(" .. i .. ",'" .. string.char(string.byte("A") + i - 1) .. "'," .. desks .. ",0)")
+    db:exec("INSERT INTO [Section] ([ID],[Letter],[Tables],[MissingPair]) VALUES(" .. i .. ",'" .. string.char(string.byte("A") + i - 1) .. "'," .. desks .. ",0)")
   end
 
    for j=1,sections do
    for i=1,desks do
-    db:exec("INSERT INTO [Tables] VALUES (" .. j .. "," .. i .. ",1,0,2,0,0,0)")
+    db:exec("INSERT INTO [Tables] ([Section],[Table],[ComputerID],[Status],[LogOnOff],[CurrentRound],[CurrentBoard],[UpdateFromRound]) VALUES (" .. j .. "," .. i .. ",1,0,2,0,0,0)")
    end
    end
    db:close()
