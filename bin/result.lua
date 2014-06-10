@@ -142,6 +142,7 @@ local function ave_result()
 	v.vp = brg.vp(v.boards,v.ximp)
 	total_vp = total_vp + v.vp
      end
+    if players[i].bonus then total_vp = total_vp + players[i].bonus end
     if total_boards >0 then 
        players[i].ave_mp = brg.floor_num(total_mp/total_boards)
        players[i].ximp = brg.floor_num(total_ximp)
@@ -215,11 +216,19 @@ local db_string = project.db_string
   end
 end
 
+function adjust()
+ local status,no,bonus  = iup.GetParam("调整得分",nil,"对号 %i\n罚分 %i\n",0,0)
+ if not status then return end
+ if not project.players or not project.players[no] then return end
+ project.players[no].bonus = bonus
+end
+
 function link_menu(menu)
  menu.item_result_get.action = download
  --menu.item_result_show_data.action = show_data
  --menu.item_result_cal.action = cal
  menu.item_result_sum.action = sum
+ menu.item_result_adjust.action = adjust
  menu.item_result_create.action = test
 end
 

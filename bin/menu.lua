@@ -24,10 +24,11 @@ item_result_get = iup.item{title="下载记录"}
 --item_result_show_data = iup.item{title="显示记录"}
 --item_result_cal = iup.item{title="计算"}
 item_result_sum = iup.item{title="累计结果"}
+item_result_adjust = iup.item{title="调整得分"}
 item_result_create = iup.item{title="生成测试数据"}
 
-menu_result = iup.menu{item_result_get,item_result_show_data,item_result_cal,item_result_sum,item_result_create}
---menu_result = iup.menu{item_result_get,item_result_show_data,item_result_cal,item_result_sum}
+menu_result = iup.menu{item_result_get,item_result_show_data,item_result_cal,item_result_sum,item_result_adjust,item_result_create}
+--menu_result = iup.menu{item_result_get,item_result_show_data,item_result_cal,item_result_sum,item_result_adjust}
 
 submenu_result = iup.submenu{menu_result,title="结果"}
 
