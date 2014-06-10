@@ -27,6 +27,8 @@ result.link_menu(menu)
 
 MainForm = frm.get_main(menu.mainmenu,tree.get_tree())
 MDI1Form = frm.get_child(matrix.get_matrix())
+
+
 MainForm:show()
 MDI1Form:show()
 iup.Refresh(MainForm)
