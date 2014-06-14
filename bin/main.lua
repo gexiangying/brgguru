@@ -15,10 +15,11 @@ require "ado"
 
 project = {}
 project.cur_round = 0
-
+project.data = {}
 function init_prj()
  project = {}
  project.cur_round = 0
+ project.data={}
 end
 
 file.link_menu(menu)

@@ -105,6 +105,7 @@ local function init_players(cur)
     players[i][cur].ximp =  0.0
     players[i][cur].vp =  0.0
     players[i][cur].boards = 0
+    players[i].vp = players[i].vp or 0.0
     players[i].no = i
   end
   
@@ -136,22 +137,28 @@ local function ave_result()
      local total_boards = 0
      local total_vp = 0.0
      for j,v in ipairs(players[i]) do 
-        total_mp = total_mp + v.mp
-	total_ximp = total_ximp + v.ximp
-	total_boards = total_boards + v.boards
-	v.vp = brg.vp(v.boards,v.ximp)
+        total_mp = total_mp + (v.mp or 0.0)
+	total_ximp = total_ximp + (v.ximp or 0.0)
+	total_boards = total_boards + (v.boards or 0)
+	if(v.boards > 0 ) then
+	v.vp = brg.vp(v.boards,(v.ximp or 0.0))
 	total_vp = total_vp + v.vp
+	end
      end
-    if players[i].bonus then total_vp = total_vp + players[i].bonus end
+    if players[i].bonus then
+    total_vp = total_vp + players[i].bonus
+    end
     if total_boards >0 then 
        players[i].ave_mp = brg.floor_num(total_mp/total_boards)
        players[i].ximp = brg.floor_num(total_ximp)
        players[i].boards = total_boards
        players[i].vp = brg.floor_num(total_vp)
     else
-       players[i].ave_mp = players[i].ave_mp or 0.0
-       players[i].ximp = players[i].ximp or 0.0
+      -- players[i].ave_mp = players[i].ave_mp or 0.0
+       players[i].ximp = brg.floor_num(total_ximp)
        players[i].boards = 0
+       players[i].vp = brg.floor_num(total_vp)
+       
     end
   end
 end

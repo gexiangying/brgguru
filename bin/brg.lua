@@ -178,6 +178,7 @@ function mp(sets)
 end
 
 function vp(boards,imp)
+        if boards < 1 then return 0.0 end
 	flag = true
 	if imp < 0.0 then
 	 flag = false
