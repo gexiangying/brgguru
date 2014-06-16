@@ -17,7 +17,8 @@ item_session_save = iup.item{title="更新轮次"}
 item_session_show = iup.item{title="显示轮次"}
 item_session_upload = iup.item{title="上传轮次"}
 
-menu_session = iup.menu{item_session_set,item_session_upset,item_session_open,item_session_add,item_session_save,item_session_show,item_session_upload}
+--menu_session = iup.menu{item_session_set,item_session_upset,item_session_open,item_session_add,item_session_save,item_session_show,item_session_upload}
+menu_session = iup.menu{item_session_set,item_session_upset,item_session_add,item_session_save,item_session_show,item_session_upload}
 submenu_session = iup.submenu{menu_session,title="比赛"}
 
 item_result_get = iup.item{title="下载记录"}

@@ -5,13 +5,17 @@ function set()
   local desks = project.desks or 0
   local rounds = project.rounds or 0  
   local players_num = project.players_num or 0
-  status,sections,desks,rounds,players_num = iup.GetParam("设置",nil,"分区 %i\n桌数 %i\n总轮次 %i\n单位数目 %i\n",sections,desks,rounds,players_num)
+  local session_type = project.session_type or 0
+  status,sections,desks,rounds,players_num,session_type = iup.GetParam("设置",nil,"分区 %i\n桌数 %i\n总轮次 %i\n单位数目 %i\n比赛类型 %l|血战到底|通讯赛|\n",sections,desks,rounds,players_num,session_type)
+  --assert(nil,session_type .. type(session_type))
   if status then
    project.sections = sections
    project.desks = desks
    project.rounds = rounds
    project.players_num = players_num
+   project.session_type = session_type
   end
+  if session_type == 1 then require("txs").init_txs() end
 end
 function upset()
   local sections = project.sections or 1
@@ -37,8 +41,18 @@ function upset()
    end
 end
 
+local function txs_add()
+local cur_round = project.cur_round or 0
+ cur_round = cur_round + 1
+ if cur_round < project.rounds + 1 then
+  matrix.reset("round",cur_round)
+ end
+end
 function add()
  if project.cur_round == project.rounds then return end
+ if project.session_type == 1 then 
+   txs_add() 
+ else
  local status
  local l = project.cur_l or 1
  local h = project.cur_h or 16
@@ -67,6 +81,7 @@ function add()
      temp[i].h = h
    end
    matrix.reset("round",cur_round)
+ end
  end
 end
 

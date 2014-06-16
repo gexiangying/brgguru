@@ -18,7 +18,11 @@ end
 function t1:executeleaf_cb(id)
     local temp = iup.TreeGetUserId(t1,id)
     assert(temp,"no userdata")
+    if project.session_type == 0 then
     matrix.reset_board(temp.round,temp.board)
+    elseif project.session_type == 1 then
+    matrix.reset_txs_board(temp.board)
+    end
     --print("temp.round" .. "temp.board")
 end
 
@@ -27,6 +31,29 @@ function get_tree()
 end
 
 function reset_t1()
+if project.session_type == 0 then
+reset_t1_0()
+elseif project.session_type == 1 then
+reset_t1_1()
+end
+end
+
+function reset_t1_1()
+ if not project.index then return end
+  t1.value = 0
+  t1.DELNODE = "MARKED"
+  t1.value = 0
+  t1.addbranch = project.name
+  local index = project.index
+  for k=#index,1,-1 do
+  t1.addleaf0 = "µÚ" .. index[k] .. "¸±"
+  local temp = {board = index[k]}
+  iup.TreeSetUserId(t1,1,temp)
+  end
+end
+
+function reset_t1_0()
+  
   local rounds = mgr.get_round_boards()
   if #rounds < 1 then return end
   t1.value = 0

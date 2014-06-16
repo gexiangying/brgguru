@@ -52,7 +52,11 @@ end
 db:close()
 
 project.data = data
+if project.session_type == 1 then
+txs_cal()
+else
 cal()
+end
 tree.reset_t1()
 end
 
@@ -73,6 +77,19 @@ local function mk_index(sets)
   end
   table.sort(index)
   return index
+end
+
+function txs_cal()
+ local sets = brg.mk_sets(project.data)  -- {[6]={set,set,set},[7]={record,record}}
+ local index = mk_index(sets)    --{6,7,8....}
+ project.index = index
+ for i,v in ipairs(index) do
+   local rs = sets[v]   --rs = {set,set,set}
+   if rs and #rs > 1 then
+   brg.mp(rs)
+   brg.ximp(rs)
+   end
+   end
 end
 
 function cal()
@@ -164,6 +181,13 @@ local function ave_result()
 end
 
 function sum()
+  if project.session_type == 0 then
+  sum_0()
+  elseif project.session_type == 1 then
+  sum_1()
+  end
+end
+function sum_0()
   
   local cur_round = project.cur_round or 0
   if cur_round < 1 then return end
@@ -180,7 +204,29 @@ function sum()
   matrix.reset_sum()
 end
 
-
+function sum_1()
+  project.players = {}
+  project.players.NS = {}
+  project.players.EW = {}
+  local NS = project.players.NS
+  local EW = project.players.EW
+  
+  for i=1,project.desks do
+   NS[i] = {boards=0,mp=0.0,ximp=0.0,no=i}
+   EW[i] = {boards=0,mp=0.0,ximp=0.0,no=i}
+  end
+  
+  for i,v in ipairs(project.data) do
+   NS[v.NS].mp = NS[v.NS].mp + v.NS_mp
+   NS[v.NS].ximp = NS[v.NS].ximp + v.NS_ximp
+   NS[v.NS].boards = NS[v.NS].boards + 1
+   
+   EW[v.EW].mp = EW[v.EW].mp + v.EW_mp
+   EW[v.EW].ximp = EW[v.EW].ximp + v.EW_ximp
+   EW[v.EW].boards = EW[v.EW].boards + 1
+  end
+  matrix.reset_sum1(NS,EW)
+end
 
 local function random_contract()
   local Declare = math.random(1,4)
