@@ -1,0 +1,4 @@
+for loop in `ls bin/*.lua`
+do
+/ge/gcad/bin/luac5.1.exe -o $loop $loop
+done
