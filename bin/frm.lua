@@ -1,4 +1,5 @@
 module(...,package.seeall)
+
 function get_main(MDIMenu,t)
 local MainForm = iup.dialog{
   menu = MDIMenu,
@@ -7,6 +8,7 @@ local MainForm = iup.dialog{
   MDIFRAME = 'YES',
 	SHRINK = "YES",
 	ICON="SMALL.ICO",
+  
   iup.vbox {
   	iup.hbox {
 	  iup.split {
@@ -16,6 +18,7 @@ local MainForm = iup.dialog{
   	      iup.frame { t, NULL }
 	    },
 	    iup.vbox {
+	   
 		iup.canvas { 
           EXPAND = 'YES', 
           MDICLIENT = 'YES',
@@ -23,12 +26,16 @@ local MainForm = iup.dialog{
      --     BGCOLOR = '128 128 128' 
      	  --MDIMENU = MDIMenu
           }
+	  
 	    }, NULL,
 	  },
 	}, NULL, 
   },
 }
+
+
 MainForm:map()
+
 return MainForm
 end
 
@@ -42,7 +49,13 @@ local MDI1Form = iup.dialog{
   ICON="SMALL.ICO",
   CONTROL="YES",
   SHRINK="YES",
-  iup.vbox{mat,EXPAND="YES"}
+  EXPAND="YES",
+  iup.vbox{mat,EXPAND="YES",SHRINK="YES"}
 }
+
+function MDI1Form:show_cb(state)
+  iup.Refresh(mat)
+end
+
 return MDI1Form;
 end
