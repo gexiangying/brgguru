@@ -35,8 +35,9 @@ file.link_menu(menu)
 session.link_menu(menu)
 result.link_menu(menu)
 
-MainForm = frm.get_main(menu.mainmenu,tree.get_tree())
-MDI1Form = frm.get_child(matrix.get_matrix())
+mat_control = matrix.get_matrix()
+MainForm,sp = frm.get_main(menu.mainmenu,tree.get_tree())
+MDI1Form = frm.get_child(mat_control)
 
 
 MainForm:show()
