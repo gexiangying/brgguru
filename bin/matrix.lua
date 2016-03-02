@@ -15,13 +15,13 @@ local function cmp_vp(a,b)
 	return a.vp > b.vp
 end
 
-local function get_sort_players()
+function get_sort_players()
 	local players = {}
 	for i,v in ipairs(project.players) do
 		players[i] = v
 	end
 	table.sort(players,cmp_vp)
-
+--[[
 	local cur = project.cur_round + 1
 	local desks = project.desks 
 
@@ -34,6 +34,7 @@ local function get_sort_players()
 		temp[i].EW = players[i * 2].no
 		temp[i].section = 1
 	end
+	--]]
 	return players
 end
 
@@ -74,26 +75,28 @@ end
 function reset_sum()
 	mode_flag = "sum"
 	local cur = project.cur_round
-	mat.numcol = cur + 3
-	mat.numcol_visible = cur + 3
+	mat.numcol = cur + 4
+	mat.numcol_visible = cur + 4
 	mat.numlin = project.players_num
 	mat.numlin_visible = project.players_num
 	mat:setcell(0,0,"对号")
-	for i=1,cur do
-		mat:setcell(0,i,"第" .. i .. "轮")
+	mat:setcell(0,1,"名次")
+	for i=2,cur+1 do
+		mat:setcell(0,i,"第" .. i-1 .. "轮")
 	end
-	mat:setcell(0,cur+1,"vp")
-	mat:setcell(0,cur+2,"总副数")
-	mat:setcell(0,cur+3,"ximp")
+	mat:setcell(0,cur+2,"vp")
+	mat:setcell(0,cur+3,"总副数")
+	mat:setcell(0,cur+4,"ximp")
 	local players = get_sort_players()
 	for i,v in ipairs(players) do
 		mat:setcell(i,0,v.no)
-		for j=1,cur do
-			mat:setcell(i,j,v[j].vp) 
+		mat:setcell(i,1,i)
+		for j=2,cur+1 do
+			mat:setcell(i,j,v[j-1].vp) 
 		end
-		mat:setcell(i,cur+1,v.vp)
-		mat:setcell(i,cur+2,v.boards)
-		mat:setcell(i,cur+3,v.ximp)
+		mat:setcell(i,cur+2,v.vp)
+		mat:setcell(i,cur+3,v.boards)
+		mat:setcell(i,cur+4,v.ximp)
 	end
 	iup.UpdateChildren(MDI1Form)
 end

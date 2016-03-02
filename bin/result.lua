@@ -110,7 +110,7 @@ function cal()
  end
 end
 
-local function init_players(cur)
+function init_players(cur)
   
   if not project.players_num then return false end
   local players = project.players or {}
@@ -147,141 +147,144 @@ local function sum_im(v,cur)
 end
 
 local function ave_result()
-  local players = project.players
-  for i=1,project.players_num do
-     local total_mp = 0.0
-     local total_ximp = 0.0
-     local total_boards = 0
-     local total_vp = 0.0
-     for j,v in ipairs(players[i]) do 
-        total_mp = total_mp + (v.mp or 0.0)
-	total_ximp = total_ximp + (v.ximp or 0.0)
-	total_boards = total_boards + (v.boards or 0)
-	if(v.boards > 0 ) then
-	v.vp = brg.vp(v.boards,(v.ximp or 0.0))
-	total_vp = total_vp + v.vp
+	local players = project.players
+	for i=1,project.players_num do
+		local total_mp = 0.0
+		local total_ximp = 0.0
+		local total_boards = 0
+		local total_vp = 0.0
+		for j,v in ipairs(players[i]) do 
+			total_mp = total_mp + (v.mp or 0.0)
+			total_ximp = total_ximp + (v.ximp or 0.0)
+			total_boards = total_boards + (v.boards or 0)
+			if(v.boards > 0 ) then
+				v.vp = brg.vp(v.boards,(v.ximp or 0.0))
+				total_vp = total_vp + v.vp
+			end
+		end
+		if players[i].bonus then
+			total_vp = total_vp + players[i].bonus
+		end
+		if players[i].bypass then
+			total_vp = total_vp + 12
+		end
+		if total_boards >0 then 
+			players[i].ave_mp = brg.floor_num(total_mp/total_boards)
+			players[i].ximp = brg.floor_num(total_ximp)
+			players[i].boards = total_boards
+			players[i].vp = brg.floor_num(total_vp)
+		else
+			-- players[i].ave_mp = players[i].ave_mp or 0.0
+			players[i].ximp = brg.floor_num(total_ximp)
+			players[i].boards = 0
+			players[i].vp = brg.floor_num(total_vp)
+
+		end
 	end
-     end
-    if players[i].bonus then
-    total_vp = total_vp + players[i].bonus
-    end
-    if total_boards >0 then 
-       players[i].ave_mp = brg.floor_num(total_mp/total_boards)
-       players[i].ximp = brg.floor_num(total_ximp)
-       players[i].boards = total_boards
-       players[i].vp = brg.floor_num(total_vp)
-    else
-      -- players[i].ave_mp = players[i].ave_mp or 0.0
-       players[i].ximp = brg.floor_num(total_ximp)
-       players[i].boards = 0
-       players[i].vp = brg.floor_num(total_vp)
-       
-    end
-  end
 end
 
 function sum()
-  if project.session_type == 0 then
-  sum_0()
-  elseif project.session_type == 1 then
-  sum_1()
-  end
+	if project.session_type == 0 then
+		sum_0()
+	elseif project.session_type == 1 then
+		sum_1()
+	end
 end
 function sum_0()
-  
-  local cur_round = project.cur_round or 0
-  if cur_round < 1 then return end
- 
-  for cur=1,cur_round do 
-  init_players(cur)
-  for i,v in ipairs(project.data) do
-    if v.round == cur then  
-      sum_im(v,cur)
-    end
-  end
-  end
-  ave_result()
-  matrix.reset_sum()
+
+	local cur_round = project.cur_round or 0
+	if cur_round < 1 then return end
+
+	for cur=1,cur_round do 
+		init_players(cur)
+		for i,v in ipairs(project.data) do
+			if v.round == cur then  
+				sum_im(v,cur)
+			end
+		end
+	end
+	ave_result()
+	matrix.reset_sum()
 end
 
 function sum_1()
-  project.players = {}
-  project.players.NS = {}
-  project.players.EW = {}
-  local NS = project.players.NS
-  local EW = project.players.EW
-  
-  for i=1,project.desks do
-   NS[i] = {boards=0,mp=0.0,ximp=0.0,no=i}
-   EW[i] = {boards=0,mp=0.0,ximp=0.0,no=i}
-  end
-  
-  for i,v in ipairs(project.data) do
-   NS[v.NS].mp = NS[v.NS].mp + v.NS_mp
-   NS[v.NS].ximp = NS[v.NS].ximp + v.NS_ximp
-   NS[v.NS].boards = NS[v.NS].boards + 1
-   
-   EW[v.EW].mp = EW[v.EW].mp + v.EW_mp
-   EW[v.EW].ximp = EW[v.EW].ximp + v.EW_ximp
-   EW[v.EW].boards = EW[v.EW].boards + 1
-  end
-  matrix.reset_sum1(NS,EW)
+	project.players = {}
+	project.players.NS = {}
+	project.players.EW = {}
+	local NS = project.players.NS
+	local EW = project.players.EW
+
+	for i=1,project.desks do
+		NS[i] = {boards=0,mp=0.0,ximp=0.0,no=i}
+		EW[i] = {boards=0,mp=0.0,ximp=0.0,no=i}
+	end
+
+	for i,v in ipairs(project.data) do
+		NS[v.NS].mp = NS[v.NS].mp + v.NS_mp
+		NS[v.NS].ximp = NS[v.NS].ximp + v.NS_ximp
+		NS[v.NS].boards = NS[v.NS].boards + 1
+
+		EW[v.EW].mp = EW[v.EW].mp + v.EW_mp
+		EW[v.EW].ximp = EW[v.EW].ximp + v.EW_ximp
+		EW[v.EW].boards = EW[v.EW].boards + 1
+	end
+	matrix.reset_sum1(NS,EW)
 end
 
 local function random_contract()
-  local Declare = math.random(1,4)
-  local str= {"N","E","S","W"}
-  local num = math.random(1,7)
-  local color = math.random(1,4)
-  local color_str={"C","D","H","S"}
-  local tricks = math.random(1,13)
-  local result = Declare .. ",'" .. str[Declare] .. "','" .. num .. color_str[color] .. "',"
-  if(tricks > num + 6) then
-   result = result .. "'+" .. tricks-num-6 .. "'"
-   elseif tricks == num +6 then
-   result = result .. "'='"
-   else
-   result = result .. "'-" .. num+6 - tricks .. "'"
-  end
-  return result
+	local Declare = math.random(1,4)
+	local str= {"N","E","S","W"}
+	local num = math.random(1,7)
+	local color = math.random(1,4)
+	local color_str={"C","D","H","S"}
+	local tricks = math.random(1,13)
+	local result = Declare .. ",'" .. str[Declare] .. "','" .. num .. color_str[color] .. "',"
+	if(tricks > num + 6) then
+		result = result .. "'+" .. tricks-num-6 .. "'"
+	elseif tricks == num +6 then
+		result = result .. "'='"
+	else
+		result = result .. "'-" .. num+6 - tricks .. "'"
+	end
+	return result
 end
 
 function test()
-math.randomseed(os.time())
-local db_string = project.db_string
-  if db_string then 
-  local db = ADO_Open(db_string)
-  local round = project.round[project.cur_round]
-  local cur_round = project.cur_round
-  db:exec("delete * from [ReceivedData] where [Round] = " .. cur_round)
-  for k,v in pairs(round) do
-   local section = v.section
-   local NS = v.NS
-   local EW = v.EW 
-   local l = v.l
-   local h = v.h
-   for i=l,h do
-   db:exec("insert into [ReceivedData] ([Section],[Table],[Round],[Board],[PairNS],[PairEW],[Declarer],[NS/EW],[Contract],[Result]) VALUES ( " ..
-     section .. "," .. k .. "," .. cur_round .. "," .. i .. "," .. NS .. "," .. EW .. "," .. random_contract().. ")")
-   end
-  end
-  db:close()
-  end
+	math.randomseed(os.time())
+	local db_string = project.db_string
+	if db_string then 
+		local db = ADO_Open(db_string)
+		local round = project.round[project.cur_round]
+		local cur_round = project.cur_round
+		db:exec("delete * from [ReceivedData] where [Round] = " .. cur_round)
+		for k,v in pairs(round) do
+			local section = v.section
+			local NS = v.NS
+			local EW = v.EW 
+			local l = v.l
+			local h = v.h
+			for i=l,h do
+				db:exec("insert into [ReceivedData] ([Section],[Table],[Round],[Board],[PairNS],[PairEW],[Declarer],[NS/EW],[Contract],[Result]) VALUES ( " ..
+				section .. "," .. k .. "," .. cur_round .. "," .. i .. "," .. NS .. "," .. EW .. "," .. random_contract().. ")")
+			end
+		end
+		db:close()
+	end
 end
 
 function adjust()
- local status,no,bonus  = iup.GetParam("调整得分",nil,"对号 %i\n罚分 %i\n",0,0)
- if not status then return end
- if not project.players or not project.players[no] then return end
- project.players[no].bonus = bonus
+	local status,no,bonus  = iup.GetParam("调整得分",nil,"对号 %i\n罚分 %i\n",0,0)
+	if not status then return end
+	if not project.players or not project.players[no] then return end
+	project.players[no].bonus = bonus
 end
 
 function link_menu(menu)
- menu.item_result_get.action = download
- --menu.item_result_show_data.action = show_data
- --menu.item_result_cal.action = cal
- menu.item_result_sum.action = sum
- menu.item_result_adjust.action = adjust
- menu.item_result_create.action = test
+	menu.item_result_get.action = download
+	--menu.item_result_show_data.action = show_data
+	--menu.item_result_cal.action = cal
+	menu.item_result_sum.action = sum
+	menu.item_result_adjust.action = adjust
+	menu.item_result_create.action = test
 end
 
